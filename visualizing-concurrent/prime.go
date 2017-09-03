@@ -11,6 +11,7 @@ func Generate(ch chan<- int) {
 }
 
 func Filter(in <-chan int, out chan<- int, prime int) {
+
 	for {
 		i := <-in
 		if i%prime != 0 {
