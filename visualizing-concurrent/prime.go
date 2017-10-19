@@ -14,6 +14,7 @@ func Filter(in <-chan int, out chan<- int, prime int) {
 
 	for {
 		i := <-in
+		fmt.Println("prime=", prime, " i=", i)
 		if i%prime != 0 {
 			out <- i
 		}
@@ -21,14 +22,14 @@ func Filter(in <-chan int, out chan<- int, prime int) {
 }
 
 func main() {
-	ch := make(chan int)
-	go Generate(ch)
+	in := make(chan int)
+	go Generate(in)
 
 	for i := 0; i < 10; i++ {
-		prime := <-ch
+		prime := <-in
 		fmt.Println(prime)
-		ch1 := make(chan int)
-		go Filter(ch, ch1, prime)
-		ch = ch1
+		out := make(chan int)
+		go Filter(in, out, prime)
+		in = out
 	}
 }
